@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from alarm import Alarm
 import traceback
 import sys

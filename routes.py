@@ -1,4 +1,3 @@
-#!/usr/bin/wnv python3
 from flask import Flask, request, send_from_directory, make_response, Blueprint, \
 redirect, url_for, g, flash, render_template, jsonify
 from http import HTTPStatus
