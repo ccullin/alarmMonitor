@@ -1,17 +1,11 @@
-from flask import Flask, request, send_from_directory, make_response, Blueprint, \
-redirect, url_for, g, flash, render_template, jsonify
+from flask import Flask, request,url_for, jsonify
 from http import HTTPStatus
 import json
-import logging
 import requests
-from config import config
 
-log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
-console = logging.StreamHandler()
-formatter = logging.Formatter('%(levelname)s, %(threadName)s, %(name)s, %(module)s, %(lineno)d: %(message)s')
-console.setFormatter(formatter)
-log.addHandler(console)
+#local imports
+from config import config
+from logger import log
 
 app = Flask(__name__)
 

@@ -8,15 +8,10 @@ from threading import Thread
 from time import sleep
 import requests
 #from urllib3.exceptions import ConnectionError
-import logging
-from config import config
 
-log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
-console = logging.StreamHandler()
-formatter = logging.Formatter('%(levelname)s, %(threadName)s, %(name)s, %(module)s, %(lineno)d: %(message)s')
-console.setFormatter(formatter)
-log.addHandler(console)
+#local imports
+from logger import log
+from config import config
 
 class Alarm(object):
     def __init__(self, passcode=config.get('passcode'), port='/dev/ttyUSB0', speed=115200):

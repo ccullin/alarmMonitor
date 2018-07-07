@@ -6,16 +6,12 @@ import signal
 import time
 import os
 from threading import Thread
-import logging
+
+#local imports
+from logger import log
 from config import config
 
 
-log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
-console = logging.StreamHandler()
-formatter = logging.Formatter('%(levelname)s, %(threadName)s, %(name)s, %(module)s, %(lineno)d: %(message)s')
-console.setFormatter(formatter)
-log.addHandler(console)
 
 alarm = Alarm(passcode=config.get('passcode'), port='/dev/ttyUSB0', speed=115200)
 
