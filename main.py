@@ -6,12 +6,14 @@ import signal
 import time
 import os
 from threading import Thread
+import logging
 
 #local imports
-from logger import log
 from config import config
+import logger
 
-
+# logger for this module
+log = logging.getLogger(__name__)
 
 alarm = Alarm(passcode=config.get('passcode'), port='/dev/ttyUSB0', speed=115200)
 

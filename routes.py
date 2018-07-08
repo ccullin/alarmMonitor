@@ -2,10 +2,13 @@ from flask import Flask, request,url_for, jsonify
 from http import HTTPStatus
 import json
 import requests
+import logging
 
 #local imports
 from config import config
-from logger import log
+
+# logger for this module
+log = logging.getLogger(__name__)
 
 app = Flask(__name__)
 

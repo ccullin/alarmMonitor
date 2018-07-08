@@ -1,0 +1,8 @@
+The twitterWebhook python source is located at '/usr/local/src/twitterWebhook' and
+the init.d script is '/etc/init.d/twitterWebhook'.
+
+'setup.sh' 
+- moves files to correct directories
+- sets the file permissions and
+- configures 'twitterWebhook' to run on boot
+

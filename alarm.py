@@ -7,11 +7,14 @@ import threading
 from threading import Thread
 from time import sleep
 import requests
+import logging
 #from urllib3.exceptions import ConnectionError
 
 #local imports
-from logger import log
 from config import config
+
+# logger for this module
+log = logging.getLogger(__name__)
 
 class Alarm(object):
     def __init__(self, passcode=config.get('passcode'), port='/dev/ttyUSB0', speed=115200):
