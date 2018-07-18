@@ -5,10 +5,10 @@ from datetime import datetime
 import sys
 import threading
 from threading import Thread
+from http import HTTPStatus
 from time import sleep
 import requests
 import logging
-#from urllib3.exceptions import ConnectionError
 
 #local imports
 from config import config
@@ -25,9 +25,9 @@ class Alarm(object):
         self.dcs1500state = 'unknown'
         self.status = 'unknown'
         self.lastStatus = 'unknown'
-        self.admins = config.get('admins')
-        self.url = config.get('WEBHOOK_ALARM_URL')
-
+        # self.admins = config.get('admins')
+        self.url = config.get('botController_webhook')
+        
         
     def start(self):
         self.thread = Thread(name="alarm_monitor", target=self.__monitor)
@@ -40,8 +40,6 @@ class Alarm(object):
         buffer_string = ''
         while not self.event.is_set():
             self.event.wait(timeout=1.0)
-        #while True:
-            #sleep(1)
             buffer_string = buffer_string + self.port.read(self.port.inWaiting()).decode(('utf-8'))
             if '\n' in buffer_string:
                 timestamp = datetime.today().isoformat()
@@ -72,13 +70,11 @@ class Alarm(object):
         log.debug("started Monitor")
         while not self.event.is_set():
             self.event.wait(timeout=1.0)
-        # while True:
-        #     sleep(1)
             self.__get_status()
             if  self.status != self.lastStatus:
                 self.sendEventNotification("alarm is {}, previously {}".
                         format(self.status, self.lastStatus.lower()))
-                log.info("alarm status change to: {} from: {}".format(self.status, self.lastStatus))
+                log.info("alarm status change to: {}  previous status: {}".format(self.status, self.lastStatus))
                 self.lastStatus = self.status
 
         
@@ -93,15 +89,14 @@ class Alarm(object):
     def get_status(self):
         return self.status
         
-        
+
     def sendEventNotification(self, msg):
-        for admin, adminId in self.admins.items():
-            message = {"recipientId":adminId, "sender":self.name, "message":msg}
-            try:
-                r = requests.post(self.url, json=message)
-            except requests.exceptions.ConnectionError as e:
-                log.warning("Connection Error: {}".format(e))
-                pass
+        message = {"recipientId":"admins", "sender":self.name, "message":msg}
+        try:
+            r = requests.post(self.url, json=message)
+        except requests.exceptions.ConnectionError as e:
+            log.warning("Connection Error: {}".format(e))
+            pass
             
 
     def command(self, cmd, respond):
@@ -126,4 +121,5 @@ class Alarm(object):
             respond (self.get_status())
         else:
             respond('invalid command')
-
+            
+        return('', HTTPStatus.OK)

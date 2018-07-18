@@ -22,7 +22,6 @@ def start_app(alarm):
     from routes import app
     app.config['SECRET_KEY'] = 'thisissupposedtobeasecret'
     app.config['Alarm'] = alarm
-    
     app.run(host='0.0.0.0', port=80, debug=True, use_reloader=False, processes=5)
 
 
@@ -38,10 +37,9 @@ def main():
         
         log.info('start alarm monitor')
         alarm.start()
-
+   
         while True:
             time.sleep(5)
-
     except ServiceExit:
         log.info("Shutting Down")
         alarm.event.set()
