@@ -18,30 +18,39 @@ for example, discord or SMS.
 
 # Installation & setup
 
-python requirements are defined in requirements.txt
+1. clone to '/usr/local/src/alarmMonitor'
+2. execute './setup.sh'
+- moves files to correct directories
+- sets the file permissions and
+- configures 'alarmMonitor' to run on boot
+3. pip3 install -r requirements.txt
+4. run 'sudo service alarmMonitor start'
+
+A Docker image is also available on [dockerhub](https://hub.docker.com/u/homebots/dashboard/).
+to run this docker image.
+1. sudo docker pull homebots/alarm
+2. docker run --name=alarm --device=/dev/ttyUSB0 -it -d -p 80:80 homebots/alarm:latestpython requirements are defined in requirements.txt
+
+
 Other requirements include:
 
-
-1.  Configure 'config.py' with your Twitter user and alarm details. a config-sample.py is provided, which must be renamed
-2.  to config.py.  Sample config:
+-  Configure 'config.py' with your Twitter user and alarm details. a config-sample.py is provided, which must be renamed to config.py.
+Sample config:
 ```
 config = {
-    "screen_name": "e.g. Twitter screen_name of your alarm",
-    "admins": {
-        "screen_name of admin 1": "twitter id",
-        "screen_name of admin 2": "twitter id",
-        },
-    "WEBHOOK_ALARM_URL": "Webhook of Bot controller, e.g. https://mydomain.com/webhook/alarm",
+    "screen_name": "e.g. Twitter screen_name of the alarm bot",
+    "botController_webhook": "Webhook of Bot controller, e.g. https://mydomain.com/webhook/alarm",
     "passcode": "passcode for alarm",
 }
 ```
 
+
 # API Reference
 
-The alarm bot implements a single webhook at 192.168.1.10/webhook/alarm.  Commands to control the alarm are POSTed to this
+The alarm bot implements a single webhook at /alarm/webhook.  Commands to control the alarm are POSTed to this
 url, which is implemented using Flask.  
 
-For Notifcations the alarm bot sends a HTTP Post request to the Bot Controller.
+For Notifcations and command repsonses the alarm bot sends a HTTP Post request to the Bot Controller.
 
 
 # Acknowledgements

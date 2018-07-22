@@ -1,17 +1,17 @@
-The twitterWebhook python source is located at '/usr/local/src/twitterWebhook' and
-the init.d script is '/etc/init.d/twitterWebhook'.
+The alarmMonitor python source is located at '/usr/local/src/alarmMonitor' and
+the init.d script is '/etc/init.d/alarmMonitor'.
 
-'setup.sh' 
+Setup optoin 1.
+- ./setup.sh 
 - moves files to correct directories
 - sets the file permissions and
-- configures 'twitterWebhook' to run on boot
+- configures 'alarmMonitor' to run on boot
+- sudo service alarmMonitor start
 
-DOCKER instructions
-1. after building on the host system save immage
-    docker save -o e:/Jupyter/alarmMonitor/alarm.tar alarm
-2. copy image to RPi
-    rsync -avz alarm.tar pi@192.168.0.4:/home/pi/alarmMonitor
-3. on RPi load impage
-    docker load -i alarm.tar
+Setup option 2 - DOCKER
+1. after building on the dev system
+    docker push homebots/alarm
+2. on destination Raspberry Pi
+    sudo docker pull homebots/alarm
 4. RUN
-    docker run --name=alarm --device=/dev/ttyUSB0 -it -p 80:80 -p 443:443 alarm:latest
+    docker run --name=alarm --device=/dev/ttyUSB0 -it -d -p 80:80 homebots/alarm:latest
