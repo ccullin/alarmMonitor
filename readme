@@ -6,3 +6,12 @@ the init.d script is '/etc/init.d/twitterWebhook'.
 - sets the file permissions and
 - configures 'twitterWebhook' to run on boot
 
+DOCKER instructions
+1. after building on the host system save immage
+    docker save -o e:/Jupyter/alarmMonitor/alarm.tar alarm
+2. copy image to RPi
+    rsync -avz alarm.tar pi@192.168.0.4:/home/pi/alarmMonitor
+3. on RPi load impage
+    docker load -i alarm.tar
+4. RUN
+    docker run --name=alarm --device=/dev/ttyUSB0 -it -p 80:80 -p 443:443 alarm:latest

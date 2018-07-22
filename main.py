@@ -22,7 +22,7 @@ def start_app(alarm):
     from routes import app
     app.config['SECRET_KEY'] = 'thisissupposedtobeasecret'
     app.config['Alarm'] = alarm
-    app.run(host='0.0.0.0', port=80, debug=True, use_reloader=False, processes=5)
+    app.run(host='0.0.0.0', port=80, debug=True, use_reloader=False)
 
 
 def main():
