@@ -12,6 +12,7 @@ import logging
 
 #local imports
 from config import config
+from mqtt import MQTT
 
 # logger for this module
 log = logging.getLogger(__name__)
@@ -27,7 +28,7 @@ class Alarm(object):
         self.lastStatus = 'unknown'
         # self.admins = config.get('admins')
         self.url = config.get('botController_webhook')
-        
+        self.mqtt = MQTT(broker="192.168.0.4", name=self.name)
         
     def start(self):
         self.thread = Thread(name="alarm_monitor", target=self.__monitor)
@@ -93,7 +94,8 @@ class Alarm(object):
     def sendEventNotification(self, msg):
         message = {"recipientId":"admins", "sender":self.name, "message":msg}
         try:
-            r = requests.post(self.url, json=message)
+            self.publish(self.name+"/event", message)
+            # r = requests.post(self.url, json=message)
         except requests.exceptions.ConnectionError as e:
             log.warning("Connection Error: {}".format(e))
             pass
