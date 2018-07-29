@@ -1,41 +1,42 @@
 import serial
+from time import sleep
 import time
 import os
 from datetime import datetime
 import sys
 import threading
 from threading import Thread
-from http import HTTPStatus
-from time import sleep
-import requests
 import logging
 
 #local imports
-from config import config
 from mqtt import MQTT
 
 # logger for this module
 log = logging.getLogger(__name__)
 
 class Alarm(object):
-    def __init__(self, passcode=config.get('passcode'), port='/dev/ttyUSB0', speed=115200):
+    def __init__(self, name, device, passcode, speed=115200, **kwargs):
         super(Alarm,self).__init__()
-        self.name = config.get('screen_name')
+        log.debug(kwargs)
+        self.name = name
         self.passcode = passcode
-        self.port = serial.serial_for_url(port, baudrate=speed, timeout=0)
+        self.port = serial.serial_for_url(device, baudrate=speed, timeout=0)
         self.dcs1500state = 'unknown'
         self.status = 'unknown'
         self.lastStatus = 'unknown'
-        # self.admins = config.get('admins')
-        self.url = config.get('botController_webhook')
-        self.mqtt = MQTT(broker="192.168.0.4", name=self.name)
-        
+        self.mqtt = MQTT(broker="192.168.0.4", name=self.name, alarm=self)
+        self.mqtt.subscribe(self.name+'/command')
+
     def start(self):
         self.thread = Thread(name="alarm_monitor", target=self.__monitor)
         self.event = threading.Event()
         self.thread.start()
-        #self.__monitor()
+        # delete after verify #self.__monitor()
 
+    def stop(self):
+        self.mqtt.loop_stop()
+        self.mqtt.disconnect()
+        self.event.set()
 
     def __readSerial(self):
         buffer_string = ''
@@ -65,7 +66,7 @@ class Alarm(object):
             self.status = 'ARMING'
         else:
             self.status = 'DISARMED'
-
+        pass
     
     def __monitor(self):
         log.debug("started Monitor")
@@ -94,8 +95,7 @@ class Alarm(object):
     def sendEventNotification(self, msg):
         message = {"recipientId":"admins", "sender":self.name, "message":msg}
         try:
-            self.publish(self.name+"/event", message)
-            # r = requests.post(self.url, json=message)
+            self.mqtt.publish(self.name+"/event", str(message))
         except requests.exceptions.ConnectionError as e:
             log.warning("Connection Error: {}".format(e))
             pass
@@ -123,5 +123,3 @@ class Alarm(object):
             respond (self.get_status())
         else:
             respond('invalid command')
-            
-        return('', HTTPStatus.OK)

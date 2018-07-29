@@ -14,15 +14,16 @@ import logger
 
 # logger for this module
 log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
 
-alarm = Alarm(passcode=config.get('passcode'), port='/dev/ttyUSB0', speed=115200)
+log.debug(type(config))
+log.debug(config)
+alarm = Alarm(**config)
 
-
-def start_app(alarm):
-    from routes import app
-    app.config['SECRET_KEY'] = 'thisissupposedtobeasecret'
-    app.config['Alarm'] = alarm
-    app.run(host='0.0.0.0', port=3000, debug=True, use_reloader=False)
+# def start_app(alarm):
+#     from routes import app
+#     app.config['SECRET_KEY'] = 'thisissupposedtobeasecret'
+#     app.run(host='0.0.0.0', port=config.get('port'), debug=True, use_reloader=False)
 
 
 def main():
@@ -31,18 +32,16 @@ def main():
     signal.signal(signal.SIGINT, service_shutdown)
     
     try:
-        log.info('start API')
-        app_thread = Thread(target=start_app, args=(alarm,), name='alarm-api', daemon=True)
-        app_thread.start()
-        
+        # log.info('start API')
+        # app_thread = Thread(target=start_app, args=(alarm,), name='alarm-api', daemon=True)
+        # app_thread.start()
         log.info('start alarm monitor')
         alarm.start()
-   
         while True:
             time.sleep(5)
     except ServiceExit:
         log.info("Shutting Down")
-        alarm.event.set()
+        alarm.stop()
         alarm.thread.join()
         log.info("Alarm Monitor shutdown")
         sys.exit(0)
