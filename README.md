@@ -9,9 +9,9 @@ the house alarm and the alarm sends notifications via Twitter.  So I need to mov
 The solution comprises two components 1) a Bot Contoller that interfaces into Twitter via the new Account Activity API
 and webhooks (see [Git Twitter_webhook](https://github.com/ccullin/twitter-webhook), and 2) this alarm Bot.
 
-The Alarm Bot has a webhook for the Bot Controller to post commmands to, and will post requests (events) of its own to the
-Bot Controller, which the Bot Controller then sends out via Twitter Direct Message.  All the Twitter interfacing is in the
-Bot Controller and the alarm bot is much simpler
+The Alarm Bot and Bot Controller interface over MQTT.  the Bot Controller provides the Web interface via an abstracted API,
+with current support for Twitter. the Alarm Bot receives commands, send responses, and send notification evemts over MQTT, 
+and the Bot Controller maps to the web interface.
 
 It is now also possible to replace or supliment Twitter with another communications medium for command and notification,
 for example, discord or SMS.
@@ -29,28 +29,24 @@ for example, discord or SMS.
 A Docker image is also available on [dockerhub](https://hub.docker.com/u/homebots/dashboard/).
 to run this docker image.
 1. sudo docker pull homebots/alarm
-2. docker run --name=alarm --device=/dev/ttyUSB0 -it -d -p 80:80 homebots/alarm:latestpython requirements are defined in requirements.txt
+2. docker run --name=alarm --device=/dev/ttyUSB0 -it -d homebots/alarm:latest
 
 
 Other requirements include:
 
--  Configure 'config.py' with your Twitter user and alarm details. a config-sample.py is provided, which must be renamed to config.py.
+-  Configure 'config.py'. a config-sample.py is provided, which must be renamed to config.py.
 Sample config:
 ```
 config = {
-    "screen_name": "e.g. Twitter screen_name of the alarm bot",
-    "botController_webhook": "Webhook of Bot controller, e.g. https://mydomain.com/webhook/alarm",
-    "passcode": "passcode for alarm",
+    "name": "e.g. alarmBot, this needs to match to name in Bot Controller",
+    "device": "e.g. /dev/ttUSB0, this is the serial interface the DSC alarm is connect to"
+    "passcode": "passcode for the DSC alarm",
 }
 ```
 
-
 # API Reference
 
-The alarm bot implements a single webhook at /alarm/webhook.  Commands to control the alarm are POSTed to this
-url, which is implemented using Flask.  
-
-For Notifcations and command repsonses the alarm bot sends a HTTP Post request to the Bot Controller.
+The alarm bot subscribes to 'alarm name'/commands and published  to 'alarm name'/response and 'alarm name'/event MQTT topics.
 
 
 # Acknowledgements
