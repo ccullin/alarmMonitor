@@ -17,7 +17,7 @@ class MQTT(mqtt.Client):
         self.name = name
         self.alarm = alarm
         self.message_callback_add(self.name+"/command", self.__on_command)
-        self.connect(broker)
+        self.connect_async(broker)
         self.loop_start()        
         
 
