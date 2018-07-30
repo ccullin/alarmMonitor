@@ -25,6 +25,7 @@ class Alarm(object):
         self.status = 'unknown'
         self.lastStatus = 'unknown'
         self.mqtt = MQTT(broker="192.168.0.4", name=self.name, alarm=self)
+        log.debug("subscribe {}/command".format(self.name))
         self.mqtt.subscribe(self.name+'/command')
 
     def start(self):
@@ -95,6 +96,7 @@ class Alarm(object):
     def sendEventNotification(self, msg):
         message = {"recipientId":"admins", "sender":self.name, "message":msg}
         try:
+            log.debug("publish {}/event msg: {}".format(self.name, str(message)))
             self.mqtt.publish(self.name+"/event", str(message))
         except requests.exceptions.ConnectionError as e:
             log.warning("Connection Error: {}".format(e))

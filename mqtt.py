@@ -25,7 +25,8 @@ class MQTT(mqtt.Client):
         # Callback function to reply back to commadn sender    
         def __respond(recipientId, sender):
             def respond(msg):
-                message = {"recipientId":recipientId, "sender":sender, "message":msg}
+                message = {"recipientId":recipientId, "sender":selnder, "message":msg}
+                log.debug("publish {}/response msg: {}".format(self.name, str(message)))
                 self.publish(self.name+'/response', str(message))
             return respond
 
