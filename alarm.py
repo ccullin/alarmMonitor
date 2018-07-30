@@ -31,7 +31,7 @@ class Alarm(object):
         self.thread = Thread(name="alarm_monitor", target=self.__monitor)
         self.event = threading.Event()
         self.thread.start()
-        # delete after verify #self.__monitor()
+        self.__monitor()
 
     def stop(self):
         self.mqtt.loop_stop()
