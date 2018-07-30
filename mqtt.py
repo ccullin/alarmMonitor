@@ -30,9 +30,9 @@ class MQTT(mqtt.Client):
                 self.publish(self.name+'/response', str(message))
             return respond
 
-        log.debug("message received: {} ".format(str(message.payload.decode("utf-8").replace("'", '"'))))
+        log.debug("message received: {} ".format(str(message.payload.decode("utf-8"))))
         jsonMsg = json.loads(message.payload.decode("utf-8").replace("'", '"'))
-        bot = jsonMsg.get('recipient', None)
+        bot = jsonMsg.get('recipientId', None)
         sender = jsonMsg.get('sender', None)
         senderId = jsonMsg.get('senderId', None)
         command = jsonMsg.get('command', None)
