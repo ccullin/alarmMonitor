@@ -13,6 +13,7 @@ from mqtt import MQTT
 
 # logger for this module
 log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
 
 class Alarm(object):
     def __init__(self, name, device, passcode, speed=115200, **kwargs):
