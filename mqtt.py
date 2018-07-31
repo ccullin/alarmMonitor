@@ -19,7 +19,14 @@ class MQTT(mqtt.Client):
         self.message_callback_add(self.name+"/command", self.__on_command)
         self.connect(broker)
         self.loop_start()        
-        
+    
+    def on_connect(self, client, userdata, flags, rc):
+        if rc==0:
+            log.debug("connected OK Returned code= {}".format(rc))
+            log.debug("subscribe {}/command".format(self.name))
+            self.subscribe(self.alarm.name+'/command')
+        else:
+            log.debug("Bad connection Returned code= {}".format(rc))        
 
     def __on_command(self, client, userdata, message):
         # Callback function to reply back to commadn sender    
