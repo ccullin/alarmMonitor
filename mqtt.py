@@ -25,14 +25,14 @@ class MQTT(mqtt.Client):
         # Callback function to reply back to commadn sender    
         def __respond(recipientId, sender):
             def respond(msg):
-                message = {"recipientId":recipientId, "sender":selnder, "message":msg}
+                message = {"recipientId":recipientId, "sender":sender, "message":msg}
                 log.debug("publish {}/response msg: {}".format(self.name, str(message)))
                 self.publish(self.name+'/response', str(message))
             return respond
 
         log.debug("message received: {} ".format(str(message.payload.decode("utf-8"))))
         jsonMsg = json.loads(message.payload.decode("utf-8").replace("'", '"'))
-        bot = jsonMsg.get('recipientId', None)
+        bot = jsonMsg.get('recipient', None)
         sender = jsonMsg.get('sender', None)
         senderId = jsonMsg.get('senderId', None)
         command = jsonMsg.get('command', None)
