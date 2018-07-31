@@ -17,7 +17,6 @@ log.setLevel(logging.DEBUG)
 
 class Alarm(object):
     def __init__(self, name, device, passcode, speed=115200, **kwargs):
-        # super(Alarm,self).__init__()
         log.debug(kwargs)
         self.name = name
         self.passcode = passcode

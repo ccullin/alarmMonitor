@@ -20,11 +20,6 @@ log.debug(type(config))
 log.debug(config)
 alarm = Alarm(**config)
 
-# def start_app(alarm):
-#     from routes import app
-#     app.config['SECRET_KEY'] = 'thisissupposedtobeasecret'
-#     app.run(host='0.0.0.0', port=config.get('port'), debug=True, use_reloader=False)
-
 
 def main():
     # Register the signal handlers
@@ -32,9 +27,6 @@ def main():
     signal.signal(signal.SIGINT, service_shutdown)
     
     try:
-        # log.info('start API')
-        # app_thread = Thread(target=start_app, args=(alarm,), name='alarm-api', daemon=True)
-        # app_thread.start()
         log.info('start alarm monitor')
         alarm.start()
         while True:
