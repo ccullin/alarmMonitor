@@ -1,6 +1,4 @@
 pyserial
-Flask
-TwitterAPI
 pymongo
 paho-mqtt
 

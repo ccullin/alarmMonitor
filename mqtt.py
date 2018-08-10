@@ -1,9 +1,8 @@
-
+import paho.mqtt.client as mqtt
 import logging
 import json
 
 # local imports
-import paho.mqtt.client as mqtt
 import logger
 
 # logger for this module
@@ -12,10 +11,10 @@ log.setLevel(logging.DEBUG)
 
 
 class MQTT(mqtt.Client):
-    def __init__(self, broker, name, alarm):
+    def __init__(self, broker, name, menu):
         super().__init__(name)
         self.name = name
-        self.alarm = alarm
+        self.execute = menu
         self.message_callback_add(self.name+"/command", self.__on_command)
         self.connect(broker)
         self.loop_start()        
@@ -24,7 +23,7 @@ class MQTT(mqtt.Client):
         if rc==0:
             log.debug("connected OK Returned code= {}".format(rc))
             log.debug("subscribe {}/command".format(self.name))
-            self.subscribe(self.alarm.name+'/command')
+            self.subscribe(self.name+'/command')
         else:
             log.debug("Bad connection Returned code= {}".format(rc))        
 
@@ -45,7 +44,7 @@ class MQTT(mqtt.Client):
         command = jsonMsg.get('command', None)
         
         log.debug("sending command '{}' to bot '{}'".format(command, bot))
-        r = self.alarm.command(command,__respond(recipientId=senderId, sender=bot))
+        r = self.execute(command,__respond(recipientId=senderId, sender=bot))
         return (r)
 
 

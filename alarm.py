@@ -24,7 +24,7 @@ class Alarm(object):
         self.dcs1500state = 'unknown'
         self.status = 'unknown'
         self.lastStatus = 'unknown'
-        self.mqtt = MQTT(broker="192.168.0.4", name=self.name, alarm=self)
+        self.mqtt = MQTT(broker="192.168.0.4", name=self.name, menu=self.command)
 
     def start(self):
         self.thread = Thread(name="alarm_monitor", target=self.__monitor)

@@ -13,6 +13,6 @@ console.setFormatter(formatter)
 root_logger.addHandler(console)
 
 # Define logging to file.  Use same format as console.
-logfile = RotatingFileHandler('/var/log/alarmMonitor.log', maxBytes=5096, backupCount=5)
+logfile = RotatingFileHandler('/var/log/alarmbot/alarmbot.log', maxBytes=5096, backupCount=5)
 logfile.setFormatter(formatter)
 root_logger.addHandler(logfile)
