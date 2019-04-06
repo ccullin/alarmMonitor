@@ -16,15 +16,16 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 class Alarm(object):
-    def __init__(self, name, device, passcode, speed=115200, **kwargs):
+    def __init__(self, name, device, passcode, broker, speed=115200, **kwargs):
         log.debug(kwargs)
         self.name = name
         self.passcode = passcode
         self.port = serial.serial_for_url(device, baudrate=speed, timeout=0)
+        self.broker = broker
         self.dcs1500state = 'unknown'
         self.status = 'unknown'
         self.lastStatus = 'unknown'
-        self.mqtt = MQTT(broker="192.168.0.4", name=self.name, menu=self.command)
+        self.mqtt = MQTT(broker=self.broker, name=self.name, menu=self.command)
 
     def start(self):
         self.thread = Thread(name="alarm_monitor", target=self.__monitor)
