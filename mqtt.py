@@ -23,7 +23,7 @@ class MQTT(mqtt.Client):
         self.name = name
         self.execute = menu
         self.message_callback_add(self.name+"/command", self.__on_command)
-        self.setupConnection
+        self.setupConnection()
         self.loop_start()  
         
     def setupConnection(self):
