@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 class Alarm(object):
-    def __init__(self, name, device, passcode, broker, speed=115200, **kwargs):
+    def __init__(self, name, device, passcode, mqtt_host, speed=115200, **kwargs):
         log.debug(kwargs)
         self.name = name
         self.passcode = passcode
