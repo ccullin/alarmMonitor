@@ -1,4 +1,3 @@
 pyserial
 pymongo
-wheel
 paho-mqtt

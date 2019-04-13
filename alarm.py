@@ -21,7 +21,7 @@ class Alarm(object):
         self.name = name
         self.passcode = passcode
         self.port = serial.serial_for_url(device, baudrate=speed, timeout=0)
-        self.broker = broker
+        self.broker = mqtt_host
         self.dcs1500state = 'unknown'
         self.status = 'unknown'
         self.lastStatus = 'unknown'

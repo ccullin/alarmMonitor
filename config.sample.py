@@ -1,5 +1,6 @@
 config = {
-    "screen_name": "e.g. Twitter screen_name of your alarm",
-    "botController_webhook": "Webhook of Bot controller.  See github ccullin/twitter-webhook",
-    "passcode": "passcode for alarm",
+    "name": "alarmbot",
+    "device": "/dev/ttyUSB0",
+    "passcode": "5555",
+    "mqtt_host": "hostname or IP address of mqtt broker",
 }

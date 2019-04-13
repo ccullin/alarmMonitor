@@ -9,8 +9,8 @@ the house alarm and the alarm sends notifications via Twitter.  So I need to mov
 The solution comprises two components 1) a Bot Contoller that interfaces into Twitter via the new Account Activity API
 and webhooks (see [Git Twitter_webhook](https://github.com/ccullin/twitter-webhook), and 2) this alarm Bot.
 
-The Alarm Bot and Bot Controller interface over MQTT.  the Bot Controller provides the Web interface via an abstracted API,
-with current support for Twitter. the Alarm Bot receives commands, send responses, and send notification evemts over MQTT, 
+The Alarm Bot and Bot Controller interface over MQTT.  The Bot Controller provides the Web interface via an abstracted API,
+with current support for Twitter. the Alarm Bot receives commands, send responses, and send notification events over MQTT, 
 and the Bot Controller maps to the web interface.
 
 It is now also possible to replace or supliment Twitter with another communications medium for command and notification,
@@ -41,12 +41,13 @@ config = {
     "name": "e.g. alarmBot, this needs to match to name in Bot Controller",
     "device": "e.g. /dev/ttUSB0, this is the serial interface the DSC alarm is connect to"
     "passcode": "passcode for the DSC alarm",
+    "mqtt_host": "hostname or ip address of mqtt broker",
 }
 ```
 
 # API Reference
 
-The alarm bot subscribes to 'alarm name'/commands and published  to 'alarm name'/response and 'alarm name'/event MQTT topics.
+The alarm bot subscribes to 'alarm name'/commands and publishes to 'alarm name'/response and 'alarm name'/event MQTT topics.
 
 
 # Acknowledgements

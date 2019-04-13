@@ -1,6 +1,12 @@
 import paho.mqtt.client as mqtt
 import logging
 import json
+import time
+
+#to catch socket conection errors
+import errno
+from socket import error as socket_error
+
 
 # local imports
 import logger
@@ -13,12 +19,28 @@ log.setLevel(logging.DEBUG)
 class MQTT(mqtt.Client):
     def __init__(self, broker, name, menu):
         super().__init__(name)
+        self.broker = broker
         self.name = name
         self.execute = menu
         self.message_callback_add(self.name+"/command", self.__on_command)
-        self.connect(broker)
-        self.loop_start()        
-    
+        self.setupConnection
+        self.loop_start()  
+        
+    def setupConnection(self):
+        connected = False
+        while not connected:
+            try:
+                self.connect(self.broker)
+                connected = True
+            except socket_error as serr:
+                if serr.errno != errno.ECONNREFUSED:
+                    # Not the error we are looking for, re-raise
+                    raise serr
+                # connection refused
+                log.debug("the connection to MQTT was refused")
+                time.sleep(10)
+
+
     def on_connect(self, client, userdata, flags, rc):
         if rc==0:
             log.debug("connected OK Returned code= {}".format(rc))
